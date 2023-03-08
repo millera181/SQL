@@ -1,0 +1,46 @@
+CREATE TABLE inventory (id INTEGER PRIMARY KEY, item TEXT, stock INTEGER, rating REAL, color NONE, price Numeric);
+
+INSERT INTO inventory VALUES (1, "Shirts", 26, 4.2, "Blue", 6);
+INSERT INTO inventory VALUES (2, "Skirts", 6, 3.9, "Black", 4);
+INSERT INTO inventory VALUES (3, "Pants", 19, 4.1, "Blue", 12);
+INSERT INTO inventory VALUES (4, "Hats", 12, 2.1, "Red", 3);
+INSERT INTO inventory VALUES (5, "Socks", 34, 3.2, "White", 5);
+INSERT INTO inventory VALUES (6, "Necklace", 3, 1.1, "Gold", 1);
+INSERT INTO inventory VALUES (7, "Heels", 5, 5.0, "Red", 13);
+INSERT INTO inventory VALUES (8, "Tennis Shoes", 2, 3.9, "Cream", 8);
+INSERT INTO inventory VALUES (9, "iPhone Charger", 67, 3.3, "Black", 2);
+INSERT INTO inventory VALUES (10, "iPhone Charger", 32, 3.9, "Pink", 2);
+INSERT INTO inventory VALUES (11, "Hair Band", 45, 4.2, "Black", 1);
+INSERT INTO inventory VALUES (12, "Lip Stick", 8, 3.2, "Ruby Red", 4);
+INSERT INTO inventory VALUES (13, "Scrub Tops", 17, 3.3, "Black", 8);
+INSERT INTO inventory VALUES (14, "Scrub Pants", 22, 3.1, "Black", 10);
+INSERT INTO inventory VALUES (15, "Throw Blankets", 9, 4.5, "Cream", 14);
+SELECT * FROM inventory;
+
+/* Which items do we have to most stock of? The least? */
+
+SELECT item, min(stock) AS 'lowest stock' from inventory;
+SELECT item, max(stock) AS 'highest stock' FROM inventory;
+
+/* Which items have the highest ratings? The lowest? */
+
+SELECT item, min(rating) AS 'lowest rating' FROM inventory;
+SELECT item, max(rating) AS 'highest rating' FROM inventory;
+
+/* We need to find out how many seperate spaces we need in our stock room to keep things organized. How many items do we need to make room for? */
+
+SELECT COUNT(item) AS 'Number of Items' from inventory;
+
+/* Our manager decided she wants to have 50% more available spaces for items in our stock room in case we add more items to our inventory. What would this number be? Round to the nearest whole number. */
+
+SELECT ROUND(COUNT(item)*1.5) AS 'Spaces needed in Stock Room' from inventory;
+
+/* What is the average rating for all items in the store? */
+
+SELECT AVG(rating) from inventory;
+
+/* Your manager wants to offer the item with the lowest rating at a 50% discount so that we can clear the inventory to move a new item into it's place. Show the name, stock, current price, and sale price for this item. */
+
+SELECT item, stock, price, ((price)-(price*0.25)) AS 'Sale Price' FROM inventory
+ORDER BY rating ASC
+LIMIT 1;
