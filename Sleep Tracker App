@@ -1,0 +1,77 @@
+CREATE TABLE sleep_tracker_users
+    (user_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    firstname TEXT,
+    lastname TEXT,
+    birthday INTEGER,
+    state TEXT);
+    
+CREATE TABLE sleep_logs
+    (log_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sleeper_id INTEGER,
+    log_date INTEGER,
+    hours NUMERIC,
+    mood TEXT);
+    
+    
+INSERT INTO sleep_tracker_users (firstname, lastname, birthday, state) VALUES 
+('Jennifer', 'Dursley', 19880802, 'WV'),
+('Jimmy', 'Johnson', 19920913, 'CA'),
+('Sandy', 'Rims', 19770121, 'FL');
+
+INSERT INTO sleep_logs (sleeper_id, log_date, hours, mood)
+VALUES 
+(1, 20220501, 6.25, 'Fair'),
+(2, 20220501, 8.25, 'Energetic'),
+(3, 20220501, 4.5, 'Drained'),
+(1, 20220503, 6.75, 'Good'),
+(2, 20220502, 6.0, 'Fair'),
+(1, 20220503, 6.75, 'Good'),
+(3, 20220503, 5.75, 'Fair');
+
+SELECT * FROM sleep_tracker_users;
+
+SELECT * FROM sleep_logs
+ORDER BY sleeper_id;
+
+SELECT a.user_id, a.firstname, a.lastname, b.log_date, b.hours, b.mood
+FROM sleep_tracker_users AS a
+JOIN sleep_logs AS b
+ON a.user_id = b. sleeper_id
+ORDER BY user_id;
+
+/* What is the average number of hours that each user sleeps? Order from greatest to least. */
+
+SELECT sleeper_id, AVG(hours) AS average_sleep
+FROM sleep_logs
+GROUP BY sleeper_id
+ORDER BY average_sleep DESC;
+
+/* Sandy Rims took a midday name for 1.5 hours on 20220501 and his hours and mood need to be updated for the day. Mood changes from Drained to Good after the much needed extra rest. */
+
+UPDATE sleep_logs
+SET hours = 4.5+1.5, mood = 'Good'
+WHERE sleeper_id = 3 AND log_date = 20220501;
+
+SELECT a.user_id, a.firstname, a.lastname, b.log_date, b.hours, b.mood
+FROM sleep_tracker_users AS a
+JOIN sleep_logs AS b
+ON a.user_id = b. sleeper_id
+ORDER BY user_id;
+
+/* Jennifer Dursley mistakenly entered two of the same enteries on 20220503. The duplicate logs are log_id 4 and 6. Delete log 6. */
+
+DELETE FROM sleep_logs 
+WHERE log_id = 6;
+
+SELECT a.user_id, a.firstname, a.lastname, b.log_date, b.hours, b.mood
+FROM sleep_tracker_users AS a
+JOIN sleep_logs AS b
+ON a.user_id = b. sleeper_id
+ORDER BY user_id;
+
+/* With this updated information, get the new average sleep time from each user. Order from greatest to least. */
+
+SELECT sleeper_id, AVG(hours) AS average_sleep
+FROM sleep_logs
+GROUP BY sleeper_id
+ORDER BY average_sleep DESC;
